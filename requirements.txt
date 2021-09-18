@@ -1,0 +1,13 @@
+torch
+pytorch-lightning
+albumentations
+torchvision
+click
+pathlib
+numpy
+matplotlib
+PyYAML
+scikit-learn
+hydra-core
+omegaconf
+wandb

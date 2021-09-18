@@ -1,0 +1,18 @@
+# Make hydra
+
+dataset:
+  name: chess_keypoints
+  path: "../../../data"
+  train_size: 0.8
+  batch_size: 2
+  num_classes: 1
+  num_keypoints: 4
+
+model:
+  lr: 0.001
+  epochs: 30
+  lr_step: 0.1
+
+logging:
+  weights_path: "../../../weights"
+  tensorboard_logs: "../../../logs"
