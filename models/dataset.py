@@ -9,17 +9,6 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
 
-def xyxyn2xyxy(original_size: torch.Size, coords: torch.tensor):
-    channels, height, width = original_size
-
-    new_coords = torch.empty_like(coords, dtype=torch.int)
-
-    new_coords[:, 0] = (coords[:, 0] * height).type(torch.int)
-    new_coords[:, 1] = (coords[:, 1] * width).type(torch.int)
-
-    return new_coords
-
-
 def xyxy2torchvision(coords: torch.tensor):
     new_coords = torch.empty(size=[coords.size()[0], 3])
 
@@ -28,6 +17,8 @@ def xyxy2torchvision(coords: torch.tensor):
     new_coords[:, 2] = 1
 
     return new_coords
+
+
 
 
 class ChessDataset(Dataset):
@@ -55,8 +46,7 @@ class ChessDataset(Dataset):
             # 3 means that each keypoint should be represented in this form: [x, y, visibility],
             # where visibility = 0 means that keypoint is not visible (visible - 1)
             y = self.labels[item]
-            y = torch.as_tensor(y).reshape(-1, 2)
-            y = xyxyn2xyxy(x.size(), y)
+            y = torch.as_tensor(y * 256.).reshape(-1, 2)
 
             boxes = torch.as_tensor([torch.min(y[:, 0]),
                                      torch.min(y[:, 1]),
@@ -64,14 +54,11 @@ class ChessDataset(Dataset):
                                      torch.max(y[:, 1])])
 
             points = xyxy2torchvision(y)
-            output = []
-
-            for ii in range(len(boxes)):
-                output.append({
-                    "boxes": boxes[ii],
-                    "labels": torch.as_tensor(0),
-                    "points": points[ii]
-                })
+            output = {
+                "boxes": boxes.unsqueeze(0),
+                "labels": torch.as_tensor(0).unsqueeze(0),
+                "keypoints": points.unsqueeze(0)
+            }
             return x, output
 
         else:

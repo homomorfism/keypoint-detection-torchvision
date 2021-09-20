@@ -1,3 +1,6 @@
+import sys
+from collections import defaultdict
+
 import pytorch_lightning as pl
 import torch
 import torchvision
@@ -17,30 +20,49 @@ class ChessKeypointDetection(pl.LightningModule):
         self.cfg = cfg
 
         self.model = keypointrcnn_resnet50_fpn(num_classes=cfg.dataset.num_classes,
-                                               num_keypoints=cfg.dataset.num_keypoints)
-        self.loss = nn.SmoothL1Loss()
+                                               num_keypoints=cfg.dataset.num_keypoints,
+                                               trainable_backbone_layers=True)
 
-    def training_step(self, batch, batch_idx) -> float:
+    def training_step(self, batch, batch_idx):
         images, labels = batch
-        print(f"Len labels: {len(labels)}")
-        for key, value in labels[0].items():
-            print(f"key: {key},  size: {value.size()}")
-        output = self.model(images, labels)
-        loss = self.loss(output['boxes'], labels)
-        self.log("train/smooth_l1_loss", loss)
-        return loss
+
+        images = list(image for image in images)
+        labels = [{k: v for k, v in t.items()} for t in labels]
+
+        losses = self.model(images, labels)
+        for name, value in losses.items():
+            self.log(f"train/{name}", value)
+
+        return None
 
     def validation_step(self, batch, batch_idx):
         images, labels = batch
-        output = self.model(images)
-        loss = self.loss(output['boxes'], labels)
-        return {"val_loss": loss}
+
+        images = list(image for image in images)
+        labels = [{k: v for k, v in t.items()} for t in labels]
+
+        self.model.train()
+        with torch.no_grad():
+            losses = self.model(images, labels)
+
+        for name, value in losses.items():
+            self.log(f"val/{name}", value)
+
+        return losses
 
     def validation_epoch_end(self, outputs):
         # Add logging images (best and worst examples)
-        avg_loss = torch.stack([x['val_loss'] for x in outputs]).mean()
-        self.log("val/smooth_l1_loss_epoch", avg_loss)
-        return {'val_loss_epoch': avg_loss}
+
+        loss_types = outputs[0].keys()
+        avg_losses = defaultdict(torch.tensor)
+
+        for name in loss_types:
+            avg_loss = torch.stack([x[name] for x in outputs if name in x]).mean()
+            self.log(f"val/{name}_epoch", avg_loss)
+            avg_losses[name] = avg_loss
+
+        total_losses = torch.stack([loss for loss in avg_losses.values()])
+        return {"val_epoch_total_loss": total_losses.mean()}
 
     def forward(self, x):
         return self.model(x)

@@ -15,4 +15,4 @@ model:
 
 logging:
   weights_path: "../../../weights"
-  tensorboard_logs: "../../../logs"
+  wandb_logs: "../../../outputs"

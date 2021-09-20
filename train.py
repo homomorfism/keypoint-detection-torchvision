@@ -5,6 +5,10 @@ from models.dataloader import ChessDataloader
 from models.trainer import ChessKeypointDetection
 from omegaconf import DictConfig
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
+import wandb
+
+pl.seed_everything(0)
+
 
 
 @hydra.main(config_path="config", config_name="config")
@@ -16,7 +20,10 @@ def train(cfg: DictConfig):
 
     model = ChessKeypointDetection(cfg)
 
-    logger = WandbLogger(project="ChessKeypointDetection", log_model=True, **cfg)
+    logger = WandbLogger(project="ChessKeypointDetection", name="initial_experiment", log_model=True)
+
+    logger.log_hyperparams(dict(cfg))
+    logger.save()
 
     model_checkpoint = ModelCheckpoint(dirpath=cfg.logging.weights_path,
                                        save_last=False,
@@ -30,11 +37,12 @@ def train(cfg: DictConfig):
         logger=logger,
         callbacks=[model_checkpoint, lr_monitor],
         max_epochs=cfg.model.epochs,
-        fast_dev_run=True,
+        # fast_dev_run=True,
         gpus=0)
 
     trainer.fit(model, loader.train_dataloader(), loader.val_dataloader())
 
 
 if __name__ == '__main__':
+    wandb.login()
     train()
