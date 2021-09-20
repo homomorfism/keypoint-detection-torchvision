@@ -34,11 +34,12 @@ def train(cfg: DictConfig):
     lr_monitor = LearningRateMonitor(logging_interval='step')
 
     trainer = pl.Trainer(
+        log_gpu_memory='all',
         logger=logger,
         callbacks=[model_checkpoint, lr_monitor],
         max_epochs=cfg.model.epochs,
-        # fast_dev_run=True,
-        gpus=0)
+        fast_dev_run=True,
+        gpus=1)
 
     trainer.fit(model, loader.train_dataloader(), loader.val_dataloader())
 
