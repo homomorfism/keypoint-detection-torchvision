@@ -1,14 +1,14 @@
-from pytorch_lightning.loggers import WandbLogger
 import hydra
 import pytorch_lightning as pl
-from models.dataloader import ChessDataloader
-from models.trainer import ChessKeypointDetection
+import wandb
 from omegaconf import DictConfig
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
-import wandb
+from pytorch_lightning.loggers import WandbLogger
+
+from models.dataloader import ChessDataloader
+from models.trainer import ChessKeypointDetection
 
 pl.seed_everything(0)
-
 
 
 @hydra.main(config_path="config", config_name="config")
@@ -20,7 +20,7 @@ def train(cfg: DictConfig):
 
     model = ChessKeypointDetection(cfg)
 
-    logger = WandbLogger(project="ChessKeypointDetection", name="initial_experiment", log_model=True)
+    logger = WandbLogger(project="TmpChessKeypointDetection", name="tmp_initial_experiment", log_model=True)
 
     logger.log_hyperparams(dict(cfg))
     logger.save()
