@@ -13,6 +13,9 @@ model:
   epochs: 30
   lr_step: 0.1
 
+# 0 for CPU training, 1 for GPU training
+gpus: 1
+
 logging:
   weights_path: "../../../weights"
   wandb_logs: "../../../outputs"

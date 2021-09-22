@@ -38,7 +38,7 @@ def train(cfg: DictConfig):
         logger=logger,
         callbacks=[model_checkpoint, lr_monitor],
         max_epochs=cfg.model.epochs,
-        gpus=1,
+        gpus=cfg.gpus,
     )
 
     trainer.fit(model, loader.train_dataloader(), loader.val_dataloader())
