@@ -56,7 +56,7 @@ class ChessKeypointDetection(pl.LightningModule):
             avg_losses[name] = avg_loss
 
         total_mean_loss = torch.stack([loss for loss in avg_losses.values()]).mean()
-        self.log('val_epoch_total_loss', total_mean_loss)
+        self.log('val/val_epoch_total_loss', total_mean_loss)
 
         return {"val_epoch_total_loss": total_mean_loss}
 
