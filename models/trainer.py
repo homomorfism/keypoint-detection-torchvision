@@ -1,17 +1,11 @@
-import sys
 from collections import defaultdict
 
 import pytorch_lightning as pl
 import torch
-import torchvision
+from omegaconf import DictConfig
 from torch.optim import Adam
 from torch.optim.lr_scheduler import StepLR
-from torchvision.models.detection.keypoint_rcnn import KeypointRCNN, keypointrcnn_resnet50_fpn
-import torchvision.models as models
-from torchvision.models.detection.anchor_utils import AnchorGenerator
-import torch.nn as nn
-
-from omegaconf import DictConfig
+from torchvision.models.detection.keypoint_rcnn import keypointrcnn_resnet50_fpn
 
 
 class ChessKeypointDetection(pl.LightningModule):
@@ -61,8 +55,10 @@ class ChessKeypointDetection(pl.LightningModule):
             self.log(f"val/{name}_epoch", avg_loss)
             avg_losses[name] = avg_loss
 
-        total_losses = torch.stack([loss for loss in avg_losses.values()])
-        return {"val_epoch_total_loss": total_losses.mean()}
+        total_mean_loss = torch.stack([loss for loss in avg_losses.values()]).mean()
+        self.log('val_epoch_total_loss', total_mean_loss)
+
+        return {"val_epoch_total_loss": total_mean_loss}
 
     def forward(self, x):
         return self.model(x)
