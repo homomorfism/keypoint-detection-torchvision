@@ -33,14 +33,10 @@ class ChessKeypointDetection(pl.LightningModule):
         images, labels = batch
 
         images = list(image for image in images)
-        labels = [{k: v for k, v in t.items()} for t in labels]
 
         self.model.train()
         with torch.no_grad():
             losses = self.model(images, labels)
-
-        for name, value in losses.items():
-            self.log(f"val/{name}", value)
 
         return losses
 
@@ -66,6 +62,6 @@ class ChessKeypointDetection(pl.LightningModule):
     def configure_optimizers(self):
         params = [p for p in self.parameters() if p.requires_grad]
         optimizer = Adam(params, lr=self.cfg.model.lr)
-        scheduler = StepLR(optimizer=optimizer, step_size=1, gamma=self.cfg.model.lr_step)
+        scheduler = StepLR(optimizer=optimizer, step_size=10, gamma=self.cfg.model.lr_step)
 
         return [optimizer], [scheduler]

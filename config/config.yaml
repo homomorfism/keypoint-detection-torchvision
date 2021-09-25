@@ -2,7 +2,7 @@
 
 dataset:
   name: chess_keypoints
-  path: "../../../data"
+  path: "data/"
   train_size: 0.8
   batch_size: 16
   num_classes: 1
@@ -17,5 +17,5 @@ model:
 gpus: 1
 
 logging:
-  weights_path: "../../../weights"
-  wandb_logs: "../../../outputs"
+  weights_path: "weights/"
+  wandb_logs: "outputs/"

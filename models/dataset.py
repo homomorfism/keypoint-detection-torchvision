@@ -1,12 +1,10 @@
 from pathlib import Path
 
-import numpy as np
-import pytorch_lightning as pl
-import torch
-from torch.utils.data import Dataset, DataLoader
-import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
+import numpy as np
+import torch
+import torchvision.transforms as transforms
+from torch.utils.data import Dataset
 
 
 def xyxy2torchvision(coords: torch.tensor):
@@ -17,8 +15,6 @@ def xyxy2torchvision(coords: torch.tensor):
     new_coords[:, 2] = 1
 
     return new_coords
-
-
 
 
 class ChessDataset(Dataset):
@@ -39,7 +35,8 @@ class ChessDataset(Dataset):
     def __getitem__(self, item):
         x = self.images[item]
 
-        x = self.transform(x) if self.transform else transforms.ToTensor()(x)
+        # https://discuss.pytorch.org/t/normalizing-images-between-0-and-1-with-totensor-doesnt-work/104363
+        x = self.transform(x) if self.transform else transforms.ToTensor()(x) / 255.
 
         if self.flag == 'train':
             # Format of y is (num_instances, num_keypoints_in_instance, 3)
@@ -62,7 +59,7 @@ class ChessDataset(Dataset):
             return x, output
 
         else:
-            return x
+            return x, None
 
     def __len__(self):
         return len(self.images)
