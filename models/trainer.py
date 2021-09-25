@@ -23,11 +23,11 @@ class ChessKeypointDetection(pl.LightningModule):
         images = list(image for image in images)
         labels = [{k: v for k, v in t.items()} for t in labels]
 
-        losses = self.model(images, labels)
+        losses: dict = self.model(images, labels)
         for name, value in losses.items():
             self.log(f"train/{name}", value)
 
-        return None
+        return torch.tensor([losses.values()]).mean()
 
     def validation_step(self, batch, batch_idx):
         images, labels = batch
