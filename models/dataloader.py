@@ -49,9 +49,9 @@ class ChessDataloader(pl.LightningDataModule):
                                       lengths=[num_training, dataset_length - num_training],
                                       generator=torch.Generator().manual_seed(0))
 
-        return DataLoader(dataset=val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4,
+        return DataLoader(dataset=val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=2,
                           collate_fn=collate_fn)
 
     def test_dataloader(self):
-        return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=4,
+        return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=2,
                           collate_fn=collate_fn)
