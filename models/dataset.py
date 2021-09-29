@@ -70,7 +70,7 @@ if __name__ == '__main__':
     image, labels = train_dataset[0]
 
     image = image.permute(1, 2, 0).numpy()
-    labels = labels['boxes'].squeeze()[:, :2]
+    labels = labels['keypoints'].squeeze()[:, :2]
 
     plt.imshow(image)
     plt.scatter(labels[:, 0], labels[:, 1], c='r')

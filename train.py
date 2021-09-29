@@ -2,11 +2,11 @@ import os
 
 import hydra
 import pytorch_lightning as pl
-import wandb
 from omegaconf import DictConfig
 from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
 from pytorch_lightning.loggers import WandbLogger
 
+import wandb
 from models.callbacks import ImageCallback
 from models.dataloader import ChessDataloader
 from models.trainer import ChessKeypointDetection
@@ -32,13 +32,13 @@ def train(cfg: DictConfig):
     model_checkpoint = ModelCheckpoint(dirpath=cfg.logging.weights_path,
                                        save_last=False,
                                        save_top_k=1,
-                                       monitor='val/val_epoch_total_loss',
+                                       monitor='train/train_epoch_loss',
                                        mode='min',
-                                       filename="chess_epoch={epoch:0.2f}_val_loss={val/val_epoch_total_loss}",
+                                       filename="chess_epoch={epoch:0.2f}_val_loss={train/train_epoch_loss:0.2f}",
                                        )
     lr_monitor = LearningRateMonitor(logging_interval='step')
 
-    image_callback = ImageCallback(val_dataloader=loader.val_dataloader(), num_samples=5)
+    image_callback = ImageCallback(val_dataloader=loader.val_dataloader())
 
     trainer = pl.Trainer(
         log_gpu_memory='all',

@@ -3,13 +3,13 @@
 dataset:
   name: chess_keypoints
   path: "data/"
-  train_size: 0.8
+  train_size: 0.999
   batch_size: 16
   num_classes: 1
   num_keypoints: 4
 
 model:
-  lr: 0.001
+  lr: 0.01
   epochs: 30
   lr_step: 0.1
 

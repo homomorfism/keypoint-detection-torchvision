@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 import pytorch_lightning as pl
 import torch
 from omegaconf import DictConfig
@@ -27,34 +25,21 @@ class ChessKeypointDetection(pl.LightningModule):
         for name, value in losses.items():
             self.log(f"train/{name}", value)
 
+        loss = torch.hstack(list(losses.values())).mean()
+
+        self.log("train/train_mean_loss", loss)
+        return {'loss': loss}
+
+    def training_epoch_end(self, outputs: dict) -> None:
+        avg_loss = torch.hstack([x['loss'] for x in outputs]).mean()
+        self.log("train/train_epoch_loss", avg_loss)
         return None
 
-    def validation_step(self, batch, batch_idx):
-        images, labels = batch
-
-        images = list(image for image in images)
-
-        self.model.train()
-        with torch.no_grad():
-            losses = self.model(images, labels)
-
-        return losses
+    def validation_step(self, *args, **kwargs):
+        return None
 
     def validation_epoch_end(self, outputs):
-        # Add logging images (best and worst examples)
-
-        loss_types = outputs[0].keys()
-        avg_losses = defaultdict(torch.tensor)
-
-        for name in loss_types:
-            avg_loss = torch.stack([x[name] for x in outputs if name in x]).mean()
-            self.log(f"val/{name}_epoch", avg_loss)
-            avg_losses[name] = avg_loss
-
-        total_mean_loss = torch.stack([loss for loss in avg_losses.values()]).mean()
-        self.log('val/val_epoch_total_loss', total_mean_loss)
-
-        return {"val_epoch_total_loss": total_mean_loss}
+        return None
 
     def forward(self, x):
         return self.model(x)
