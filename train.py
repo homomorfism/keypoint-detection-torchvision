@@ -17,6 +17,7 @@ pl.seed_everything(0)
 @hydra.main(config_path="config", config_name="config")
 def train(cfg: DictConfig):
     source_folder = hydra.utils.get_original_cwd()
+    print(f"saving folder: {source_folder}")
     dataset_folder = os.path.join(source_folder, cfg.dataset.path)
     loader = ChessDataloader(folder=dataset_folder,
                              batch_size=cfg.dataset.batch_size,
