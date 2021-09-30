@@ -11,9 +11,11 @@ class ChessKeypointDetection(pl.LightningModule):
         super().__init__()
         self.cfg = cfg
 
-        self.model = keypointrcnn_resnet50_fpn(num_classes=cfg.dataset.num_classes,
+        self.model = keypointrcnn_resnet50_fpn(pretrained=False,
+                                               num_classes=cfg.dataset.num_classes,
                                                num_keypoints=cfg.dataset.num_keypoints,
-                                               trainable_backbone_layers=True)
+                                               pretrained_backbone=False,
+                                               trainable_backbone_layers=5)
 
     def training_step(self, batch, batch_idx):
         images, labels = batch
