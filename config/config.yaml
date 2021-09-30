@@ -2,7 +2,7 @@
 
 dataset:
   name: chess_keypoints
-  path: "data/"
+  path: "/kaggle/input/chess-keypoint-dataset/"
   train_size: 0.999
   batch_size: 16
   num_classes: 1
