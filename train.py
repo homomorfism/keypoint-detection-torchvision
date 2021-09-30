@@ -30,24 +30,37 @@ def train(cfg: DictConfig):
                          config=cfg, )
 
     model_checkpoint = ModelCheckpoint(dirpath=cfg.logging.weights_path,
-                                       save_last=False,
+                                       save_last=True,
                                        save_top_k=1,
                                        monitor='train/train_epoch_loss',
                                        mode='min',
                                        filename="chess_epoch={epoch:0.2f}_val_loss={train/train_epoch_loss:0.2f}",
                                        )
     lr_monitor = LearningRateMonitor(logging_interval='step')
-
     image_callback = ImageCallback(val_dataloader=loader.val_dataloader())
 
-    trainer = pl.Trainer(
-        log_gpu_memory='all',
-        logger=logger,
-        callbacks=[model_checkpoint, lr_monitor, image_callback],
-        max_epochs=cfg.model.epochs,
-        gpus=cfg.gpus,
-        deterministic=True
-    )
+    last_ckpt = os.path.join(cfg.logging.weights_path, 'last.ckpt')
+
+    if os.path.isfile(last_ckpt):
+        trainer = pl.Trainer(
+            log_gpu_memory='all',
+            logger=logger,
+            callbacks=[model_checkpoint, lr_monitor, image_callback],
+            max_epochs=cfg.model.epochs,
+            gpus=cfg.gpus,
+            deterministic=True,
+            resume_from_checkpoint=last_ckpt,
+        )
+
+    else:
+        trainer = pl.Trainer(
+            log_gpu_memory='all',
+            logger=logger,
+            callbacks=[model_checkpoint, lr_monitor, image_callback],
+            max_epochs=cfg.model.epochs,
+            gpus=cfg.gpus,
+            deterministic=True,
+        )
 
     trainer.fit(model, loader.train_dataloader(), loader.val_dataloader())
 
