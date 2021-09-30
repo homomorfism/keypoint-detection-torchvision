@@ -32,9 +32,9 @@ def draw_keypoints(image: np.array, points: np.array, color='c'):
     return image
 
 
-def make_grid_with_keypoints(images: list[torch.tensor],
-                             true_keypoints: list[torch.tensor],
-                             pred_keypoints: list[torch.tensor]):
+def make_grid_with_keypoints(images: list[torch.Tensor],
+                             true_keypoints: list[torch.Tensor],
+                             pred_keypoints: list[torch.Tensor]):
     """
     Green is labels, red is prediction
     :param images:
