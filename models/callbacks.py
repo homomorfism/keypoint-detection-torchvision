@@ -25,7 +25,7 @@ class ImageCallback(pl.Callback):
 
             val_images += images
             val_labels += [label['keypoints'] for label in labels]
-            val_pred += [pred['keypoints'] for pred in predictions]
+            val_pred += [pred['keypoints'].cpu() for pred in predictions]
 
         grid = make_grid_with_keypoints(val_images, val_labels, val_pred)
 
