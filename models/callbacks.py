@@ -19,7 +19,7 @@ class ImageCallback(pl.Callback):
 
         pl_module.eval()
         for images, labels in self.val_dataloader:
-            images = list(image for image in images)
+            images = list(image.to(pl_module.device) for image in images)
             labels = [{k: v for k, v in t.items()} for t in labels]
             predictions = pl_module(images)
 
