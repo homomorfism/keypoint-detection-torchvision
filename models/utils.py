@@ -18,7 +18,6 @@ def concatenate_lists(*args):
 
 def draw_keypoints(image: np.array, points: np.array, color='c'):
     assert color == 'c' or color == 'g'
-    print(f"points shape: {points.shape}, reshaping")
     points = points.reshape(-1, 2)
 
     if points.shape[0] == 0:

@@ -5,7 +5,7 @@ dataset:
   path: "/kaggle/input/chess-keypoint-dataset/"
 #  path: 'data/'
   train_size: 0.999
-  batch_size: 32
+  batch_size: 16
   num_classes: 2 # Chess + background
   num_keypoints: 4
 
