@@ -11,8 +11,9 @@ dataset:
 
 model:
   lr: 0.001
-  epochs: 30
-  lr_step: 0.1
+  epochs: 4 # 4
+  lr_step: 2
+  gamma: 0.1
 
 # 0 for CPU training, 1 for GPU training
 gpus: 1

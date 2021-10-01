@@ -49,6 +49,6 @@ class ChessKeypointDetection(pl.LightningModule):
     def configure_optimizers(self):
         params = [p for p in self.parameters() if p.requires_grad]
         optimizer = Adam(params, lr=self.cfg.model.lr)
-        scheduler = StepLR(optimizer=optimizer, step_size=10, gamma=self.cfg.model.lr_step)
+        scheduler = StepLR(optimizer=optimizer, step_size=self.cfg.model.lr_step, gamma=self.cfg.model.gamma)
 
         return [optimizer], [scheduler]

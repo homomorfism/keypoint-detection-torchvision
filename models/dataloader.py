@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader, random_split
 from models.dataset import ChessDataset
 
 
-def collate_fn(batch):
+def train_collate_fn(batch):
     data_list, label_list = [], []
 
     for data, label in batch:
@@ -16,6 +16,14 @@ def collate_fn(batch):
 
     return data_list, label_list
 
+
+def test_collate_fn(batch):
+    data_list = []
+
+    for data in batch:
+        data_list.append(data)
+
+    return data_list
 
 
 class ChessDataloader(pl.LightningDataModule):
@@ -39,7 +47,7 @@ class ChessDataloader(pl.LightningDataModule):
                                         generator=torch.Generator().manual_seed(0))
 
         return DataLoader(dataset=train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=4,
-                          collate_fn=collate_fn)
+                          collate_fn=train_collate_fn)
 
     def val_dataloader(self):
         dataset_length = len(self.train_dataset)
@@ -50,8 +58,8 @@ class ChessDataloader(pl.LightningDataModule):
                                       generator=torch.Generator().manual_seed(0))
 
         return DataLoader(dataset=val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=2,
-                          collate_fn=collate_fn)
+                          collate_fn=train_collate_fn)
 
     def test_dataloader(self):
         return DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False, num_workers=2,
-                          collate_fn=collate_fn)
+                          collate_fn=test_collate_fn)

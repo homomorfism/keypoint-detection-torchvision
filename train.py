@@ -7,7 +7,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint, LearningRateMonitor
 from pytorch_lightning.loggers import WandbLogger
 
 import wandb
-from models.callbacks import ImageCallback
+from models.callbacks import ImageCallback, ImageTestCallback
 from models.dataloader import ChessDataloader
 from models.trainer import ChessKeypointDetection
 
@@ -36,9 +36,14 @@ def train(cfg: DictConfig):
                                        monitor='train/train_epoch_loss',
                                        mode='min',
                                        filename="chess_epoch={epoch:0.2f}_val_loss={train/train_epoch_loss:0.2f}",
+                                       save_weights_only=True,
                                        )
     lr_monitor = LearningRateMonitor(logging_interval='step')
-    image_callback = ImageCallback(val_dataloader=loader.val_dataloader(), score_threshold=cfg.threshold.score)
+    val_image_callback = ImageCallback(val_dataloader=loader.val_dataloader(),
+                                       score_threshold=cfg.threshold.score)
+
+    test_image_callback = ImageTestCallback(test_dataloader=loader.test_dataloader(),
+                                            score_threshold=cfg.threshold.score)
 
     last_ckpt = os.path.join(cfg.logging.weights_path, 'last.ckpt')
 
@@ -46,7 +51,7 @@ def train(cfg: DictConfig):
         trainer = pl.Trainer(
             log_gpu_memory='all',
             logger=logger,
-            callbacks=[model_checkpoint, lr_monitor, image_callback],
+            callbacks=[model_checkpoint, lr_monitor, val_image_callback, test_image_callback],
             max_epochs=cfg.model.epochs,
             gpus=cfg.gpus,
             deterministic=True,
@@ -57,7 +62,7 @@ def train(cfg: DictConfig):
         trainer = pl.Trainer(
             log_gpu_memory='all',
             logger=logger,
-            callbacks=[model_checkpoint, lr_monitor, image_callback],
+            callbacks=[model_checkpoint, lr_monitor, val_image_callback, test_image_callback],
             max_epochs=cfg.model.epochs,
             gpus=cfg.gpus,
             deterministic=True,

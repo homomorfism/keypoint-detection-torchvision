@@ -59,7 +59,7 @@ class ChessDataset(Dataset):
             return x, output
 
         else:
-            return x, None
+            return x
 
     def __len__(self):
         return len(self.images)
