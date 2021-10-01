@@ -9,8 +9,7 @@ This repository contains source code of chess keypoint detection task.
 - pretrained weights
   - [google disk](https://drive.google.com/drive/folders/1nnQPQj8YdhH-lbJNuOHUQC4qaSyDJ1Dn?usp=sharing)
 - kaggle training script - [kaggle link](https://www.kaggle.com/hashshes/keypoint-detection)
-- training report (w/ graphs, images)
-  - [wandb.ai](https://wandb.ai/homomorfism/TmpChessKeypointDetection/reports/Keypoint-detection-Freeflex---VmlldzoxMDc3Mjc1?accessToken=ld7wwg9btyqcglb04c253811pj6o1ahj2b6eqosryz9z33hkbx13739d1901cj7j)
+- training report (w/ graphs, images) - [wandb.ai](https://wandb.ai/homomorfism/TmpChessKeypointDetection/reports/Keypoint-detection-Freeflex---VmlldzoxMDc3Mjc1?accessToken=ld7wwg9btyqcglb04c253811pj6o1ahj2b6eqosryz9z33hkbx13739d1901cj7j)
 
 ## Used technologies
 
