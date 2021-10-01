@@ -18,7 +18,8 @@ def concatenate_lists(*args):
 
 def draw_keypoints(image: np.array, points: np.array, color='c'):
     assert color == 'c' or color == 'g'
-    assert points.shape[1] == 2, f"points shape: {points.shape}"
+    print(f"points shape: {points.shape}, reshaping")
+    points = points.reshape(-1, 2)
 
     if points.shape[0] == 0:
         # No keypoints are in points
@@ -48,11 +49,10 @@ def make_grid_with_keypoints(images: list,
         image = image.numpy().squeeze()
 
         image = gray2rgb(image)
-        true = true.numpy().squeeze()
-        pred = pred.numpy().squeeze()
-
-        image = draw_keypoints(image, true[:, :2], color='g')
-        image = draw_keypoints(image, pred[:, :2], color='c')
+        true = true.numpy()
+        pred = pred.numpy()
+        image = draw_keypoints(image, true[:, :, :2], color='g')
+        image = draw_keypoints(image, pred[:, :, :2], color='c')
 
         image = np.transpose(image, axes=(2, 0, 1))
         image = torch.from_numpy(image)

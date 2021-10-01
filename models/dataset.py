@@ -53,7 +53,7 @@ class ChessDataset(Dataset):
             points = xyxy2torchvision(y)
             output = {
                 "boxes": boxes.unsqueeze(0),
-                "labels": torch.as_tensor(0).unsqueeze(0),
+                "labels": torch.as_tensor(1).unsqueeze(0),
                 "keypoints": points.unsqueeze(0)
             }
             return x, output

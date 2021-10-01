@@ -38,7 +38,7 @@ def train(cfg: DictConfig):
                                        filename="chess_epoch={epoch:0.2f}_val_loss={train/train_epoch_loss:0.2f}",
                                        )
     lr_monitor = LearningRateMonitor(logging_interval='step')
-    image_callback = ImageCallback(val_dataloader=loader.val_dataloader())
+    image_callback = ImageCallback(val_dataloader=loader.val_dataloader(), score_threshold=cfg.threshold.score)
 
     last_ckpt = os.path.join(cfg.logging.weights_path, 'last.ckpt')
 

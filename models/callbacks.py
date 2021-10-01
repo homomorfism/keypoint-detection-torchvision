@@ -7,10 +7,11 @@ from models.utils import make_grid_with_keypoints
 
 
 class ImageCallback(pl.Callback):
-    def __init__(self, val_dataloader: DataLoader):
+    def __init__(self, val_dataloader: DataLoader, score_threshold: float):
         super(ImageCallback, self).__init__()
 
         self.val_dataloader = val_dataloader
+        self.score_threshold = score_threshold
 
     def on_validation_epoch_end(self, trainer: pl.Trainer, pl_module: pl.LightningModule) -> None:
         val_images = []
@@ -25,7 +26,7 @@ class ImageCallback(pl.Callback):
 
             val_images += images
             val_labels += [label['keypoints'] for label in labels]
-            val_pred += [pred['keypoints'].cpu() for pred in predictions]
+            val_pred += [pred['keypoints'][pred['scores'] > self.score_threshold].cpu() for pred in predictions]
 
         grid = make_grid_with_keypoints(val_images, val_labels, val_pred)
 
