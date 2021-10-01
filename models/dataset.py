@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torchvision.transforms as transforms
@@ -65,14 +64,3 @@ class ChessDataset(Dataset):
         return len(self.images)
 
 
-if __name__ == '__main__':
-    train_dataset = ChessDataset(root_folder=Path("../data"), flag='train')
-    image, labels = train_dataset[0]
-
-    image = image.permute(1, 2, 0).numpy()
-    labels = labels['keypoints'].squeeze()[:, :2]
-
-    plt.imshow(image)
-    plt.scatter(labels[:, 0], labels[:, 1], c='r')
-
-    plt.show()

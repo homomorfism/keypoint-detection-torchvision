@@ -2,7 +2,15 @@
 
 This repository contains source code of chess keypoint detection task.
 
-## Link to colab example: [Google Colab](https://colab.research.google.com/drive/1TK1RDZjQB0jLCdSBGc90huPtYx6d6qwU?usp=sharing)
+## Links:
+
+- dataset
+  - [google disk](https://wandb.ai/homomorfism/TmpChessKeypointDetection/reports/Keypoint-detection-Freeflex---VmlldzoxMDc3Mjc1?accessToken=ld7wwg9btyqcglb04c253811pj6o1ahj2b6eqosryz9z33hkbx13739d1901cj7j)
+- pretrained weights
+  - [google disk](https://drive.google.com/drive/folders/1nnQPQj8YdhH-lbJNuOHUQC4qaSyDJ1Dn?usp=sharing)
+- kaggle training script - [kaggle link](https://www.kaggle.com/hashshes/keypoint-detection)
+- training report (w/ graphs, images)
+  - [wandb.ai](https://wandb.ai/homomorfism/TmpChessKeypointDetection/reports/Keypoint-detection-Freeflex---VmlldzoxMDc3Mjc1?accessToken=ld7wwg9btyqcglb04c253811pj6o1ahj2b6eqosryz9z33hkbx13739d1901cj7j)
 
 ## Used technologies
 
@@ -10,21 +18,23 @@ This repository contains source code of chess keypoint detection task.
 - torchvision for keypoint detection model
 - hydra for configuration model/data
 - wandb for logging images/losses (optional)
+- opencv for plotting points
 
 ## Visualisation of train data
 
-![](jupyter-notebooks/train_data.png)
+![](images/train-data.png)
 
 ## Launch training
 
-Download data from [Google Disk](https://drive.google.com/drive/folders/1-Fr_RzLVOTr7znADuxoricqlXy8OzGT6?usp=sharing)
+Download data
+from [google disk](https://wandb.ai/homomorfism/TmpChessKeypointDetection/reports/Keypoint-detection-Freeflex---VmlldzoxMDc3Mjc1?accessToken=ld7wwg9btyqcglb04c253811pj6o1ahj2b6eqosryz9z33hkbx13739d1901cj7j)
 and put it into ```data/``` folder.
 
 Run in console:
 
 ```bash
 python -m pip install -r requirements.txt
-python train.py (or python train.py path/to/hygra/config.yaml)
+python train.py
 ```
 
 ## The structure of repository
@@ -40,9 +50,18 @@ python train.py (or python train.py path/to/hygra/config.yaml)
 
 - ```train.py``` - training script fot
 
+## Training curves (more on wandb.ai)
+
+![training curves](images/training-curves.png)
+
 ## Results of training
 
-to be added
+Samples from last epoch:
+
+- on validation dataset (red points are predictions, green point are true labels)
+  ![validation](images/validation-last-epoch.png)
+- on test dataset (red points are predictions)
+  ![testing](images/testing-data.png)
 
 ## Contributions
 

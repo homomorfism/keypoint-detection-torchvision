@@ -1,5 +1,4 @@
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torchvision.utils
@@ -61,13 +60,3 @@ def make_grid_with_keypoints(images: list,
     return torchvision.utils.make_grid(preprocessed_images)
 
 
-if __name__ == '__main__':
-    _images = [torch.randn(1, 256, 256) for _ in range(3)]
-    _labels = [torch.randint(0, 256, size=(1, 4, 2)) for _ in range(3)]
-    _pred = [torch.randint(0, 256, size=(1, 3, 2)) for _ in range(3)]
-
-    grid = make_grid_with_keypoints(_images, _labels, _pred)
-    grid = torch.permute(grid, dims=(1, 2, 0)).numpy()
-
-    plt.imshow(grid)
-    plt.show()
