@@ -10,7 +10,7 @@ dataset:
   num_keypoints: 4
 
 model:
-  lr: 0.01
+  lr: 0.001
   epochs: 30
   lr_step: 0.1
 
