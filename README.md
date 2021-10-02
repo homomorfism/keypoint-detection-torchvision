@@ -57,7 +57,8 @@ Steps for setting up training/testing process (assuming training locally).
    from [google disk](https://wandb.ai/homomorfism/TmpChessKeypointDetection/reports/Keypoint-detection-Freeflex---VmlldzoxMDc3Mjc1?accessToken=ld7wwg9btyqcglb04c253811pj6o1ahj2b6eqosryz9z33hkbx13739d1901cj7j)
    and put it into ```data/``` folder (so, data folder should contain 3 files - `xtest.npy`, `xtrain.npy`
    and `ytrain.npy`)
-2. Install requirements file for project: `python -m pip install -r requirements.txt`
+2. Install requirements file for project: `python -m pip install -r requirements.txt` (if something went wrong -
+   try `pip install -r requirements-dev.txt`)
 3. (Optionally) Change default batch size, parameters of model in `config/config.yaml` file
 4. Run training: `python train.py`
     1. In training script you will be asked for api key for connecting to [wandb.ai](https://wandb.ai) - follow
